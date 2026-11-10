@@ -4,12 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library Book Reservation System</title>
-  <link rel="stylesheet" href="Library.css">
-  <script src="Library.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
 
+ 
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1>Library Book Reservation</h1>
+        <p>Check the shelf from your phone. Hold a book for 24 hours before you walk over.</p>
+      </div>
+      <a class="my-link" href="#my-reservations">My reservations (<span id="holdCount">0</span>)</a>
+    </div>
+  </header>
+
+  <main class="layout">
+
+
+    <section class="catalog" aria-label="Book catalog">
+
+      <div class="search-row">
+        <input id="searchInput" type="search"
+               placeholder="Search by title, author, subject or ISBN"
+               aria-label="Search books">
+        <select id="searchField" aria-label="Search in">
+          <option value="all">Search everything</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+          <option value="subject">Subject</option>
+          <option value="isbn">ISBN</option>
+        </select>
+      </div>
+
+      <div class="filter-row">
+        <div id="deptFilters" class="chips" role="group" aria-label="Department filters"></div>
+        <select id="statusFilter" aria-label="Filter by availability">
+          <option value="all">Any status</option>
+          <option value="available">Available on shelf</option>
+          <option value="unavailable">Checked out or on hold</option>
+        </select>
+      </div>
+
+      <p id="resultCount" class="result-count" aria-live="polite"></p>
+
+      <div id="bookGrid" class="grid"></div>
+    </section>
+
+
+    <aside id="my-reservations" class="sidebar" aria-label="My reservations">
+      <h2>My reservations</h2>
+      <p class="hint">Holds are saved on this device. Show your student ID at the desk to collect.</p>
+      <p class="hint">Late fine: ₹10 per day after the return date, and it increases every day until the book is returned.</p>
+      <p id="notice" class="notice" role="status"></p>
+      <ul id="reservationList" class="res-list"></ul>
+    </aside>
+
+  </main>
+
+
+  <dialog id="reserveDialog">
+
+    <form id="reserveForm" novalidate>
+      <h2>Reserve this book</h2>
+      <p id="dialogBook" class="dialog-book"></p>
+
+      <label for="studentName">Student name</label>
+      <input id="studentName" type="text" maxlength="60"
+             placeholder="Full name, e.g. Sourik Biswas" autocomplete="off">
+      <p id="nameError" class="error" role="alert"></p>
+
+      <label for="studentId">Student ID</label>
+      <input id="studentId" type="text" inputmode="numeric" maxlength="8"
+             placeholder="8-digit ID, e.g. 12345678" autocomplete="off">
+      <p id="idError" class="error" role="alert"></p>
+
+      <label for="borrowDays">How many days will you borrow it? (1 to 15)</label>
+      <input id="borrowDays" type="number" min="1" max="15" step="1" value="7">
+      <p id="daysError" class="error" role="alert"></p>
+
+      <p class="hint">The book stays on the shelf for you for 24 hours. Collect it within that time. The borrowing days start from pick-up. Late books cost ₹10 per day.</p>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn primary">Confirm 24-hour hold</button>
+      </div>
+    </form>
+
+    <div id="successBox" hidden>
+      <h2>Your hold is confirmed</h2>
+      <p id="successText"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn primary" id="doneBtn">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+
 </body>
 </html>
-
- 
